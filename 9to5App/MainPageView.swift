@@ -12,6 +12,7 @@ struct MainPageView: View {
     @State private var isBellPressed = true
     @State private var alreadyParked: Bool = false
     @State private var textField: String = ""
+
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     func checkPeakTime() {
