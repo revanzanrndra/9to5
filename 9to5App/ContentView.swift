@@ -4,7 +4,7 @@ import UserNotifications
 struct ContentView: View {
     var body: some View {
         VStack {
-            Text("Push Notification Test")
+            Text("Peak-Time Notification")
                 .font(.largeTitle)
                 .padding()
             
@@ -13,7 +13,7 @@ struct ContentView: View {
             }
             .padding()
             
-            Button("Send Test Notification") {
+            Button("Test Notification") {
                 sendTestNotification()
             }
             .padding()
