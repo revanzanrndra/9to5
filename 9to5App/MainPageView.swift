@@ -61,13 +61,18 @@ struct MainPageView: View {
     var body: some View {
         NavigationStack {
             if textField.isEmpty {
-                NameView(textField: $textField)
-            } else {
+//                NameView(textField: $textField)
+//            } else {
                 VStack {
-                    HStack {
+                    VStack {
+                        Text("Welcome!")
+                            .padding(.leading)
+                            .font(.title)
+                            .bold()
+                            .frame(maxWidth:.infinity, alignment:.leading)
                         Text("Hi, \(textField)")
                             .padding(.leading)
-                        Spacer()
+                            .frame(maxWidth:.infinity, alignment:.leading)
                     }
                     Text(timeFormatter.string(from: currentTime))
                         .font(.system(size: 60, weight: .medium, design: .monospaced))
@@ -86,17 +91,19 @@ struct MainPageView: View {
                     DescriptionView(alreadyParked: $alreadyParked)
                     Spacer()
                     
-                    Button {
-                    } label: {
-                        Image(systemName:"mappin.and.ellipse.circle.fill")
-                            .font(.system(size: 80))
-                            .foregroundColor(.gray)
+                    NavigationLink(destination: MapView()) {
+                        ZStack {
+                            Image(systemName:"mappin.and.ellipse.circle.fill")
+                                .font(.system(size: 80))
+                                .foregroundColor(Color("SoftPurple"))
+                        }
                     }
+                    
                     Text("Navigate to GOP 5")
                         .padding(.top, 5)
                     
                 }
-                .navigationBarTitle("Welcome!")
+//                .navigationBarTitle("Welcome!")
                 .toolbar {
                     Button {
                         bellPressed()
@@ -107,7 +114,28 @@ struct MainPageView: View {
                 .padding(.vertical)
             }
         }
-        .padding(.horizontal)
+        .onAppear{
+            triggerNotif()
+        }
+    }
+    
+    func triggerNotificationPermission(){
+        UNUserNotificationCenter.current().requestAuthorization() { (granted, error) in
+            if granted {
+                triggerNotif()
+            }
+        }
+    }
+    
+    func triggerNotif(){
+        let content = UNMutableNotificationContent()
+        content.title = "Your destination is near!"
+        content.body = "You are close to your destination."
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        
+        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger))
     }
 }
 
