@@ -23,7 +23,7 @@ struct DescriptionView: View {
         
         let totalMinutes = (hour * 60) + minute
 
-        if totalMinutes < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
+        if totalMinutes < 480 { // 00:00 - 07:59 (480 minutes = 8 hours - ok)
             VStack {
                 Text("Prepare for Peak Time!")
                 Text("Stay updated and plan your schedule wisely.")
