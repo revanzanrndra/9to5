@@ -25,6 +25,34 @@ struct ClockModel2 {
 
 // Version 1: Peak Time (Bold, Red, Pulsating)
 struct PeakTimeClock: View {
+//    @State private var time = ClockModel2.getCurrentTime()
+//    @State private var isPulsing = false
+//    
+//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+//    
+//    var body: some View {
+//        HStack(spacing: 4) {
+//            Text(time.hours)
+//            Text(":")
+//            Text(time.minutes)
+//            Text(":")
+//            Text(time.seconds)
+//        }
+//        .font(.system(size: 48, weight: .bold, design: .monospaced))
+//        .foregroundColor(.red)
+//        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 0)
+//        .scaleEffect(isPulsing ? 1.05 : 1.0)
+//        .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: isPulsing)
+//        .onAppear { isPulsing = true }
+//        .onReceive(timer) { _ in
+//            time = ClockModel2.getCurrentTime()
+//        }
+//        .padding()
+//        .background(
+//            RoundedRectangle(cornerRadius: 15)
+//                .fill(Color.black.opacity(0.8))
+//        )
+//    }
     @State private var time = ClockModel2.getCurrentTime()
     @State private var isPulsing = false
     
@@ -38,25 +66,60 @@ struct PeakTimeClock: View {
             Text(":")
             Text(time.seconds)
         }
-        .font(.system(size: 48, weight: .bold, design: .monospaced))
+        .font(.system(size: 36, weight: .medium, design: .monospaced))
         .foregroundColor(.red)
-        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 0)
-        .scaleEffect(isPulsing ? 1.05 : 1.0)
-        .animation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true), value: isPulsing)
-        .onAppear { isPulsing = true }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.red.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.red.opacity(0.3), lineWidth: 1)
+                )
+        )
         .onReceive(timer) { _ in
             time = ClockModel2.getCurrentTime()
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 15)
-                .fill(Color.black.opacity(0.8))
-        )
     }
 }
 
 // Version 2: One Hour Until Peak (Orange, Glowing)
 struct PrePeakClock: View {
+//    @State private var time = ClockModel2.getCurrentTime()
+//    
+//    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+//    
+//    var body: some View {
+//        HStack(spacing: 4) {
+//            Text(time.hours)
+//            Text(":")
+//            Text(time.minutes)
+//            Text(":")
+//            Text(time.seconds)
+//        }
+//        .font(.system(size: 40, weight: .semibold, design: .monospaced))
+//        .foregroundColor(.orange)
+//        .shadow(color: .orange.opacity(0.7), radius: 5, x: 0, y: 0)
+//        .padding()
+//        .background(
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 12)
+//                    .fill(Color.gray.opacity(0.2))
+//                RoundedRectangle(cornerRadius: 12)
+//                    .strokeBorder(
+//                        AngularGradient(
+//                            gradient: Gradient(colors: [.orange, .yellow, .orange]),
+//                            center: .center
+//                        ),
+//                        lineWidth: 2
+//                    )
+//            }
+//        )
+//        .onReceive(timer) { _ in
+//            time = ClockModel2.getCurrentTime()
+//        }
+//    }
+    
     @State private var time = ClockModel2.getCurrentTime()
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -69,23 +132,16 @@ struct PrePeakClock: View {
             Text(":")
             Text(time.seconds)
         }
-        .font(.system(size: 40, weight: .semibold, design: .monospaced))
-        .foregroundColor(.orange)
-        .shadow(color: .orange.opacity(0.7), radius: 5, x: 0, y: 0)
+        .font(.system(size: 36, weight: .medium, design: .monospaced))
+        .foregroundColor(.yellow)
         .padding()
         .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.gray.opacity(0.2))
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(
-                        AngularGradient(
-                            gradient: Gradient(colors: [.orange, .yellow, .orange]),
-                            center: .center
-                        ),
-                        lineWidth: 2
-                    )
-            }
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.yellow.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
+                )
         )
         .onReceive(timer) { _ in
             time = ClockModel2.getCurrentTime()
@@ -108,14 +164,14 @@ struct NormalClock: View {
             Text(time.seconds)
         }
         .font(.system(size: 36, weight: .medium, design: .monospaced))
-        .foregroundColor(.blue)
+        .foregroundColor(.green)
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.blue.opacity(0.1))
+                .fill(Color.green.opacity(0.1))
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                        .stroke(Color.green.opacity(0.3), lineWidth: 1)
                 )
         )
         .onReceive(timer) { _ in
@@ -124,14 +180,8 @@ struct NormalClock: View {
     }
 }
 
-// Preview Provider
-struct Clock_Previews: PreviewProvider {
-    static var previews: some View {
-        VStack(spacing: 40) {
-            PeakTimeClock()
-            PrePeakClock()
-            NormalClock()
-        }
-        .preferredColorScheme(.dark)
-    }
+#Preview {
+    PeakTimeClock()
+    PrePeakClock()
+    NormalClock()
 }
