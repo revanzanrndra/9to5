@@ -13,6 +13,7 @@ struct MainPageView: View {
     @State private var alreadyParked: Bool = false
     @AppStorage("savedName") private var textField: String = ""
     @StateObject private var notifManager = NotificationsManager()
+    @AppStorage("notifNavigationTarget") var notifNavigationTarget: String?
     
     // Timer
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -31,7 +32,9 @@ struct MainPageView: View {
                 
                 DescriptionView2(alreadyParked: $alreadyParked)
                     .padding(.bottom, 30)
-                
+                Button("Test Notification") {
+                    notifManager.testNotification()
+                }
                 Text(timeFormatter.string(from: currentTime))
                     .font(.system(size: 60, weight: .medium, design: .monospaced))
                     .padding()
@@ -54,6 +57,9 @@ struct MainPageView: View {
                         .font(.system(size: 80))
                         .foregroundColor(Color(.green))
                         .padding()
+                }
+                NavigationLink(destination: MapView(), tag: "navigateToGOP5", selection: $notifNavigationTarget) {
+                    EmptyView()
                 }
                 
                 Text("Let’s navigate to GOP 5 🚘")
@@ -78,6 +84,7 @@ struct MainPageView: View {
             .padding(.vertical)
         }
         .onAppear {
+            notifManager.registerNotificationCategories()
             notifManager.permissionNotification { granted in
                 if granted {
                     notifManager.scheduleDailyNotification(from: NotifContent.peakHour)

@@ -46,7 +46,7 @@ struct SplashScreen: View {
                         fadeIn = true
                     }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         withAnimation {
                             isActive = true
                         }
