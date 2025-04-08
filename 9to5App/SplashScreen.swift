@@ -16,12 +16,13 @@ struct SplashScreen: View {
             AppStartView()
         } else {
             ZStack {
-                Color.white.ignoresSafeArea()
+                Color(.systemBackground)
+                     .ignoresSafeArea()
                 
                 VStack(spacing: 12) {
                     Image("Splash")
                         .resizable()
-                        .renderingMode(.original) 
+                        .renderingMode(.original)
                         .interpolation(.high)
                         .scaledToFit()
                         .frame(width: 220, height: 220)
@@ -29,12 +30,12 @@ struct SplashScreen: View {
                     
                     Text("9to5")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                         .kerning(1)
                     
                     Text("Stress-Free Parking Solutions")
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.gray.opacity(0.9))
+                        .foregroundColor(.secondary) // adaptif juga
                         .italic()
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
@@ -45,7 +46,6 @@ struct SplashScreen: View {
                         fadeIn = true
                     }
                     
-                    // Tahan splash selama 4.5 detik
                     DispatchQueue.main.asyncAfter(deadline: .now() + 4.5) {
                         withAnimation {
                             isActive = true
