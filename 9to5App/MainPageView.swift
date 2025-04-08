@@ -42,7 +42,7 @@ struct MainPageView: View {
         if isBellPressed {
             Image(systemName: "bell.circle.fill")
                 .font(.system(size: 30))
-                .foregroundColor(.yellow)
+                .foregroundColor(Color("SoftPurple"))
         } else {
             Image(systemName: "bell.slash.circle.fill")
                 .font(.system(size: 30))
@@ -64,16 +64,9 @@ struct MainPageView: View {
 //                NameView(textField: $textField)
 //            } else {
                 VStack {
-                    VStack {
-                        Text("Welcome!")
-                            .padding(.leading)
-                            .font(.title)
-                            .bold()
-                            .frame(maxWidth:.infinity, alignment:.leading)
-                        Text("Hi, \(textField)")
-                            .padding(.leading)
-                            .frame(maxWidth:.infinity, alignment:.leading)
-                    }
+                    Spacer()
+                    DescriptionView2(alreadyParked: $alreadyParked)
+                        .padding(.bottom, 30)
                     Text(timeFormatter.string(from: currentTime))
                         .font(.system(size: 60, weight: .medium, design: .monospaced))
                         .padding()
@@ -85,10 +78,10 @@ struct MainPageView: View {
                         .overlay(RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.black, lineWidth: 1))
                     
-                    DescriptionView2(alreadyParked: $alreadyParked)
                     
-                    Spacer()
+//                    Spacer()
                     DescriptionView(alreadyParked: $alreadyParked)
+                        .padding(.top, 30)
                     Spacer()
                     
                     NavigationLink(destination: MapView()) {
@@ -103,12 +96,23 @@ struct MainPageView: View {
                         .padding(.top, 5)
                     
                 }
-//                .navigationBarTitle("Welcome!")
+                .padding(.top)
                 .toolbar {
-                    Button {
-                        bellPressed()
-                    } label: {
-                        bellSwitch()
+                    ToolbarItem(placement: .topBarLeading) {
+                        Text("Hi, \(textField)")
+                            .fontWeight(.bold)
+                    }
+                    
+                    ToolbarItem {
+                        Spacer()
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            bellPressed()
+                        } label: {
+                            bellSwitch()
+                        }
                     }
                 }
                 .padding(.vertical)
