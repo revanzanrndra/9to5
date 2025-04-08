@@ -12,8 +12,17 @@ struct SplashScreen: View {
         Image("Splash")
             .resizable()
             .scaledToFit()
-            .frame(width: 300, height: 300)
+            .frame(width: 250, height: 250)
+            .padding()
+        Text("9to5")
+            .font(.largeTitle)
+            .bold()
+        Text("Stress-Free Parking Solutions")
+            .font(.title2)
+            .italic()
+            .padding(15)
     }
+    
 }
 
 #Preview {
