@@ -48,99 +48,104 @@ struct MapView: View {
     
     var body: some View {
         
-        Map(position: $gop){
-            UserAnnotation()
-            //            if let route = navigatorManager.route{
-            //                MapPolyline(route)
-            //                    .stroke(Color.pink, lineWidth: 3)
-            //            }
-            if !navigatorManager.routePoints.isEmpty {
-                MapPolyline(MKPolyline(coordinates: navigatorManager.routePoints, count: navigatorManager.routePoints.count))
-                    .stroke(Color.blue, lineWidth: 5)
-            }
-            Annotation("GOP 9 Parking Lot", coordinate: .gop9Parking, anchor: .bottom){
-                Image(systemName: "car")
-                    .padding(3)
-                    .background(RoundedRectangle(cornerRadius: 5).fill(.background))
-                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 2))
-                    .onTapGesture {
-                        nameDestination = "GOP 9 Parking Lot"
-                        destination = .gop9Parking
-                        print(nameDestination!)
-                        navigatorManager.getDirectionsOnce(to: destination!)
-                        travelEstimates.distance = navigatorManager.estimatedDistance
-                        travelEstimates.duration = navigatorManager.estimatedDuration
-                        travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                        print(travelEstimates)
-                        showBottomSheet = true
-                    }
-            }
-            Annotation("GOP 5 Parking Lot", coordinate: .gop5Parking, anchor: .bottom){
-                ZStack {
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(.background)
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(lineWidth: 2)
+        ZStack{
+            Map(position: $gop){
+                UserAnnotation()
+                //            if let route = navigatorManager.route{
+                //                MapPolyline(route)
+                //                    .stroke(Color.pink, lineWidth: 3)
+                //            }
+                if !navigatorManager.routePoints.isEmpty {
+                    MapPolyline(MKPolyline(coordinates: navigatorManager.routePoints, count: navigatorManager.routePoints.count))
+                        .stroke(Color.blue, lineWidth: 5)
+                }
+                Annotation("GOP 9 Parking Lot", coordinate: .gop9Parking, anchor: .bottom){
                     Image(systemName: "car")
                         .padding(3)
+                        .background(RoundedRectangle(cornerRadius: 5).fill(.background))
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(lineWidth: 2))
                         .onTapGesture {
-                            nameDestination = "GOP 5 Parking Lot"
-                            destination = .gop5Parking
+                            nameDestination = "GOP 9 Parking Lot"
+                            destination = .gop9Parking
                             print(nameDestination!)
                             navigatorManager.getDirectionsOnce(to: destination!)
                             travelEstimates.distance = navigatorManager.estimatedDistance
                             travelEstimates.duration = navigatorManager.estimatedDuration
                             travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                            estimatedDistance = navigatorManager.estimatedArrivalTime
                             print(travelEstimates)
                             showBottomSheet = true
                         }
                 }
+                Annotation("GOP 5 Parking Lot", coordinate: .gop5Parking, anchor: .bottom){
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.background)
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(lineWidth: 2)
+                        Image(systemName: "car")
+                            .padding(3)
+                            .onTapGesture {
+                                nameDestination = "GOP 5 Parking Lot"
+                                destination = .gop5Parking
+                                print(nameDestination!)
+                                navigatorManager.getDirectionsOnce(to: destination!)
+                                travelEstimates.distance = navigatorManager.estimatedDistance
+                                travelEstimates.duration = navigatorManager.estimatedDuration
+                                travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
+                                estimatedDistance = navigatorManager.estimatedArrivalTime
+                                print(travelEstimates)
+                                showBottomSheet = true
+                            }
+                    }
+                }
             }
-        }
-        .onAppear{
-            CLLocationManager().requestWhenInUseAuthorization()
-            nameDestination = "GOP 5 Parking Lot"
-            navigatorManager.getDirectionsOnce(to: .gop5Parking)
-//            travelEstimates.distance = navigatorManager.estimatedDistance
-//            travelEstimates.duration = navigatorManager.estimatedDuration
-//            travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-            print(travelEstimates)
-            showBottomSheet = true
-        }
-        .mapControls{
-            MapUserLocationButton()
-            MapCompass()
-            MapPitchToggle()
-            MapScaleView()
-        }
-        .mapStyle(.standard(elevation: .realistic))
-        .sheet(isPresented: $showBottomSheet) {
-            BottomSheetView(nameDestination: $nameDestination,
-                            isNavigationActive: $isNavigationActive,
-                            travelEstimates: $travelEstimates)
-            .presentationDetents([.fraction(0.4)])
-            .presentationBackgroundInteraction(.enabled)
-        }
-        .onChange(of: isNavigationActive, initial: false) {
-            if isNavigationActive == true {
-                navigatorManager.startUpdatingDirections(to: destination ?? CLLocationCoordinate2D(latitude: 0, longitude: 0))
-                
-            } else if isNavigationActive == false{
-                navigatorManager.stopUpdatingDirections()
-                
+            .onAppear{
+                CLLocationManager().requestWhenInUseAuthorization()
+                nameDestination = "GOP 5 Parking Lot"
+                navigatorManager.getDirectionsOnce(to: .gop5Parking)
+                //            travelEstimates.distance = navigatorManager.estimatedDistance
+                //            travelEstimates.duration = navigatorManager.estimatedDuration
+                //            travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
+                print(travelEstimates)
+                showBottomSheet = true
             }
-        }
-        .onReceive(
-            navigatorManager.$estimatedDistance
-                .combineLatest(
-                    navigatorManager.$estimatedDuration,
-                    navigatorManager.$estimatedArrivalTime
-                )
-        ) { distance, duration, time in
-            if let distance = distance, let duration = duration, let time = time {
-                travelEstimates = TravelEstimates(distance: distance, duration: duration, travelTime: time)
+            .mapControls{
+                MapUserLocationButton()
+                MapCompass()
+//                MapPitchToggle()
+                MapScaleView()
             }
+            .mapStyle(.standard(elevation: .realistic))
+            .onChange(of: isNavigationActive, initial: false) {
+                if isNavigationActive == true {
+                    navigatorManager.startUpdatingDirections(to: destination ?? CLLocationCoordinate2D(latitude: 0, longitude: 0))
+                    
+                } else if isNavigationActive == false{
+                    navigatorManager.stopUpdatingDirections()
+                    
+                }
+            }
+            .onReceive(
+                navigatorManager.$estimatedDistance
+                    .combineLatest(
+                        navigatorManager.$estimatedDuration,
+                        navigatorManager.$estimatedArrivalTime
+                    )
+            ) { distance, duration, time in
+                if let distance = distance, let duration = duration, let time = time {
+                    travelEstimates = TravelEstimates(distance: distance, duration: duration, travelTime: time)
+                }
+            }
+            VStack {
+                Spacer()
+                BottomSheetView(nameDestination: $nameDestination,
+                                isNavigationActive: $isNavigationActive,
+                                travelEstimates: $travelEstimates)
+                .background(Color.white)
+                .transition(.move(edge: .bottom)) // This is the magic ✨
+                .animation(.easeInOut, value: showBottomSheet)
+            }
+            
         }
     }
     
