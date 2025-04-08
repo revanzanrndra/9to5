@@ -1,5 +1,13 @@
 //
 //  NotificationsManager.swift
+//  UserNotification
+//
+//  Created by Tomi Timutius on 08/04/25.
+//
+
+
+//
+//  NotificationsManager.swift
 //  9to5App
 //
 //  Created by Tomi Timutius on 08/04/25.
@@ -8,27 +16,27 @@
 import Foundation
 import UserNotifications
 
-class NotificationsManager {
+class NotificationsManager: ObservableObject {
     
-    func permissionNotification() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
-            if success {
-                print("Lokasi diberikan")
-            } else {
-                print(error?.localizedDescription ?? "Error")
+    func permissionNotification(completion: @escaping (Bool) -> Void) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if let error = error {
+                print("Gagal meminta izin notifikasi: \(error.localizedDescription)")
             }
+            completion(granted)
         }
     }
     
-    func scheduleDailyNotification(title: String,body: String,hour: Int, minute: Int) {
+    func scheduleDailyNotification(from notif: NotifStructure) {
+        
         let content = UNMutableNotificationContent()
-        content.title = title
-        content.body = body
+        content.title = notif.title
+        content.body = notif.body
         content.sound = .default
         
         var dateComponents = DateComponents()
-        dateComponents.hour = hour
-        dateComponents.minute = minute
+        dateComponents.hour = notif.hour
+        dateComponents.minute = notif.minute
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         
@@ -38,7 +46,7 @@ class NotificationsManager {
             if let error = error {
                 print("Gagal menjadwalkan notifikasi: \(error.localizedDescription)")
             } else {
-                print("Notifikasi dijadwalkan jam \(hour):\(minute)")
+                print("Notifikasi dijadwalkan jam \(notif.hour):\(notif.minute)")
             }
         }
     }

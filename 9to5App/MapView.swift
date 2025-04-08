@@ -14,13 +14,6 @@ extension CLLocationCoordinate2D {
     static let testLocation = CLLocationCoordinate2D(latitude: -6.256427, longitude: 106.760818)
 }
 
-class Kelas{
-    private init() {}
-    static var shared = Kelas()
-}
-
-
-
 struct TravelEstimates {
     var distance: String?
     var duration: String?
@@ -41,7 +34,7 @@ struct MapView: View {
     @State private var showBottomSheet = false
     @State private var isNavigationActive: Bool = false
     
-        @State private var estimatedDistance: String?
+//        @State private var estimatedDistance: String?
     //    @State private var estimatedDuration: String?
     //    @State private var estimatedTravelTime: String?
     
@@ -92,7 +85,6 @@ struct MapView: View {
                                 travelEstimates.distance = navigatorManager.estimatedDistance
                                 travelEstimates.duration = navigatorManager.estimatedDuration
                                 travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                                estimatedDistance = navigatorManager.estimatedArrivalTime
                                 print(travelEstimates)
                                 showBottomSheet = true
                             }
@@ -112,7 +104,7 @@ struct MapView: View {
             .mapControls{
                 MapUserLocationButton()
                 MapCompass()
-//                MapPitchToggle()
+                MapPitchToggle()
                 MapScaleView()
             }
             .mapStyle(.standard(elevation: .realistic))

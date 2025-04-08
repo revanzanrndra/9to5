@@ -12,7 +12,9 @@ struct MainPageView: View {
     @State private var isBellPressed = true
     @State private var alreadyParked: Bool = false
     @State private var textField: String = ""
-
+    @StateObject private var notifManager = NotificationsManager()
+    
+    
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     func checkPeakTime() {
@@ -61,8 +63,8 @@ struct MainPageView: View {
     var body: some View {
         NavigationStack {
             if textField.isEmpty {
-//                NameView(textField: $textField)
-//            } else {
+                NameView(textField: $textField)
+            } else {
                 VStack {
                     Spacer()
                     DescriptionView2(alreadyParked: $alreadyParked)
@@ -124,28 +126,15 @@ struct MainPageView: View {
                 .padding(.vertical)
             }
         }
-        .onAppear{
-            triggerNotif()
-        }
-    }
-    
-    func triggerNotificationPermission(){
-        UNUserNotificationCenter.current().requestAuthorization() { (granted, error) in
-            if granted {
-                triggerNotif()
+        .onAppear {
+            notifManager.permissionNotification { granted in
+                if granted {
+                    notifManager.scheduleDailyNotification(from: NotifContent.peakHour)
+                } else {
+                    print("Izin notifikasi ditolak.")
+                }
             }
         }
-    }
-    
-    func triggerNotif(){
-        let content = UNMutableNotificationContent()
-        content.title = "Your destination is near!"
-        content.body = "You are close to your destination."
-        content.sound = UNNotificationSound.default
-        
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-        
-        UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger))
     }
 }
 
