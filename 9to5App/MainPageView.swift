@@ -42,7 +42,7 @@ struct MainPageView: View {
         if isBellPressed {
             Image(systemName: "bell.circle.fill")
                 .font(.system(size: 30))
-                .foregroundColor(Color("SoftPurple"))
+                .foregroundColor(Color(.green))
         } else {
             Image(systemName: "bell.slash.circle.fill")
                 .font(.system(size: 30))
@@ -88,7 +88,7 @@ struct MainPageView: View {
                         ZStack {
                             Image(systemName:"mappin.and.ellipse.circle.fill")
                                 .font(.system(size: 80))
-                                .foregroundColor(Color("SoftPurple"))
+                                .foregroundColor(Color(.green))
                         }
                     }
                     
