@@ -84,15 +84,21 @@ struct MainPageView: View {
                         .padding(.top, 30)
                     Spacer()
                     
+                    VStack {
+                        Text("Out of spot? No problem!")
+                    }
+                    .padding(.top, 10)
+                    
                     NavigationLink(destination: MapView()) {
                         ZStack {
                             Image(systemName:"mappin.and.ellipse.circle.fill")
                                 .font(.system(size: 80))
                                 .foregroundColor(Color(.green))
+                                .padding()
                         }
                     }
                     
-                    Text("Navigate to GOP 5")
+                    Text(" Let’s navigate to GOP 5 🚘")
                         .padding(.top, 5)
                     
                 }
