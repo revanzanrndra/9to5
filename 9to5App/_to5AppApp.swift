@@ -12,7 +12,7 @@ struct _to5AppApp: App {
 //    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            AppStartView()
+            SplashScreen()
         }
     }
 }
