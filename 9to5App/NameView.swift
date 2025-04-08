@@ -14,7 +14,7 @@ struct NameView: View {
 
     var body: some View {
         VStack {
-            Image("Logo")
+            Image("Splash")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200)
@@ -26,8 +26,8 @@ struct NameView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                 
-                Text("Welcome Aboard \(tempName)!")
-                    .padding()
+//                Text("Welcome Aboard \(tempName)!")
+//                    .padding()
             }
             .padding(.bottom, 150)
             Button(action: {
