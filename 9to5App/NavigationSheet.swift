@@ -119,7 +119,6 @@ struct BottomSheetView: View {
             .padding(.bottom, 6)
             .listStyle(.plain)
             
-            Spacer()
         }
         .padding()
 //        .background(.thinMaterial)
