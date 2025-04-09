@@ -16,7 +16,7 @@ struct MainPageView: View {
     @AppStorage("notifNavigationTarget") var notifNavigationTarget: String?
     
     // Timer
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
     
     // Formatter waktu
     private let timeFormatter: DateFormatter = {
@@ -25,10 +25,10 @@ struct MainPageView: View {
         return formatter
     }()
     
-    func getTotalMinutes() -> Int {
+    func getTotalMinutes(from date: Date) -> Int {
         let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: currentTime)
-        let minute = calendar.component(.minute, from: currentTime)
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
         
         let totalMinutes = (hour * 60) + minute
         
@@ -42,29 +42,33 @@ struct MainPageView: View {
                 
                 DescriptionView2(alreadyParked: $alreadyParked)
                     .padding(.bottom, 30)
-                Button("Test Notification") {
-                    notifManager.testNotification()
-                }
-                
-                VStack {
-                    if getTotalMinutes() < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
-                        NormalClock()
-                    } else if getTotalMinutes() < 540 { // 08:00 - 08:59 (540 minutes = 9 hours)
-                        PrePeakClock()
-                    } else if getTotalMinutes() < 1080 { // 09:00 - 17:59 (1080 minutes = 18 hours)
-                        PeakTimeClock()
-                    } else if getTotalMinutes() <= 1439 { // 18:00 - 23:59 (1439 minutes = 23:59)
-                        NormalClock()
-                    }
-                }
-                .onAppear {
-                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                    .onReceive(timer) { _ in
                         currentTime = Date()
                     }
+                //                Button("Test Notification") {
+                //                    notifManager.testNotification()
+                //                }
+                
+                VStack {
+                    if getTotalMinutes(from: currentTime) < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
+                        NormalClock()
+                    } else if getTotalMinutes(from: currentTime) < 540 { // 08:00 - 08:59 (540 minutes = 9 hours)
+                        PrePeakClock()
+                    } else if getTotalMinutes(from: currentTime) < 1080 { // 09:00 - 17:59 (1080 minutes = 18 hours)
+                        PeakTimeClock()
+                    } else if getTotalMinutes(from: currentTime) <= 1439 { // 18:00 - 23:59 (1439 minutes = 23:59)
+                        NormalClock()
+                    }
+                }
+                .onReceive(timer) { _ in
+                    currentTime = Date() // this triggers a re-evaluation of which clock to show
                 }
                 
                 DescriptionView(alreadyParked: $alreadyParked)
                     .padding(.top, 30)
+                    .onReceive(timer) { _ in
+                        currentTime = Date() // this triggers a re-evaluation of which clock to show
+                    }
                 
                 Spacer()
                 

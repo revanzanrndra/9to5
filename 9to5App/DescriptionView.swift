@@ -38,10 +38,13 @@ struct DescriptionView: View {
                 }
             } else if totalMinutes < 1080 { // 09:00 - 17:59 (1080 minutes = 18 hours)
                 if alreadyParked {
-                    VStack {
-                        Text("Parked Successfully!")
-                            .padding(.bottom, 10)
-                        Text("You're all set. Have a great day! 🚗✨")
+                    Button {
+                    } label: {
+                        Text("Parked Successfully")
+                            .foregroundStyle(.gray)
+                            .padding()
+                            .overlay(RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray, lineWidth: 1))
                     }
                 } else {
                     Button {
