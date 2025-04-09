@@ -16,7 +16,7 @@ struct MainPageView: View {
     
     @AppStorage("alreadyParked") private var alreadyParked: Bool = false
     @AppStorage("savedName") private var textField: String = ""
-    @AppStorage("notifNavigationTarget") var notifNavigationTarget: String?
+    @AppStorage("notifNavigationTarget") var navigationTarget: String?
     
     // Timer
     let timer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
@@ -48,9 +48,10 @@ struct MainPageView: View {
                     .onReceive(timer) { _ in
                         currentTime = Date()
                     }
-                                Button("Test Notification") {
-                                    notifManager.testNotification()
-                                }
+//                Button("Test Notification") {
+//                    notifManager.testNotification()
+//                }
+//                Text(alreadyParked ? "Already parked" : "Not yet parked")
                 
                 VStack {
                     if getTotalMinutes(from: currentTime) < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
@@ -65,6 +66,7 @@ struct MainPageView: View {
                 }
                 .onReceive(timer) { _ in
                     currentTime = Date() // this triggers a re-evaluation of which clock to show
+                    checkMidnight()
                 }
                 
                 DescriptionView(alreadyParked: $alreadyParked)
@@ -84,7 +86,7 @@ struct MainPageView: View {
                         .foregroundColor(Color(.green))
                         .padding()
                 }
-                NavigationLink(destination: MapView(), tag: "navigateToGOP5", selection: $notifNavigationTarget) {
+                NavigationLink(destination: MapView(), tag: "navigateToGOP5", selection: $navigationTarget) {
                     EmptyView()
                 }
                 
@@ -112,6 +114,18 @@ struct MainPageView: View {
             UNUserNotificationCenter.current().delegate = notifDelegate
         }
     }
+    
+    private func checkMidnight() {
+           let now = Date()
+           let calendar = Calendar.current
+           let hour = calendar.component(.hour, from: now)
+           let minute = calendar.component(.minute, from: now)
+
+           // Reset jika jam sudah lewat 12:00 AM
+           if hour == 0 && minute == 0 {
+               alreadyParked = false
+           }
+       }
 }
 
 #Preview {

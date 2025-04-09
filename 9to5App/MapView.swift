@@ -34,7 +34,7 @@ struct MapView: View {
     @State private var showBottomSheet = false
     @State private var isNavigationActive: Bool = false
     
-//        @State private var estimatedDistance: String?
+    //        @State private var estimatedDistance: String?
     //    @State private var estimatedDuration: String?
     //    @State private var estimatedTravelTime: String?
     
@@ -65,7 +65,7 @@ struct MapView: View {
                             travelEstimates.distance = navigatorManager.estimatedDistance
                             travelEstimates.duration = navigatorManager.estimatedDuration
                             travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                            print(travelEstimates)
+                            
                             showBottomSheet = true
                         }
                 }
@@ -85,7 +85,6 @@ struct MapView: View {
                                 travelEstimates.distance = navigatorManager.estimatedDistance
                                 travelEstimates.duration = navigatorManager.estimatedDuration
                                 travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                                print(travelEstimates)
                                 showBottomSheet = true
                             }
                     }
@@ -95,10 +94,10 @@ struct MapView: View {
                 CLLocationManager().requestWhenInUseAuthorization()
                 nameDestination = "GOP 5 Parking Lot"
                 navigatorManager.getDirectionsOnce(to: .gop5Parking)
-                //            travelEstimates.distance = navigatorManager.estimatedDistance
-                //            travelEstimates.duration = navigatorManager.estimatedDuration
-                //            travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
-                print(travelEstimates)
+                travelEstimates.distance = navigatorManager.estimatedDistance
+                travelEstimates.duration = navigatorManager.estimatedDuration
+                travelEstimates.travelTime = navigatorManager.estimatedArrivalTime
+                
                 showBottomSheet = true
             }
             .mapControls{
@@ -141,7 +140,7 @@ struct MapView: View {
         }
     }
     
-
+    
 }
 
 #Preview {

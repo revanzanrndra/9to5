@@ -112,7 +112,7 @@ class NotificationsDelegate: NSObject, ObservableObject, UNUserNotificationCente
         switch response.actionIdentifier {
         case "ALREADY_PARK_ACTION":
             print( "User tapped: Already Parked")
-            UserDefaults.standard.set(true , forKey: "notifAlreadyParked")
+            UserDefaults.standard.set(true , forKey: "alreadyParked")
         case "NAVIGATE_TO_GOP5_ACTION":
             print("User tapped: Navigation to GOP5")
             UserDefaults.standard.set("navigateToGOP5", forKey: "notifNavigationTarget")
