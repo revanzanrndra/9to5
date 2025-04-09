@@ -21,13 +21,14 @@ struct NameView: View {
                 .frame(width: 200)
             
             Text("Hi, What's Your Name?")
-                .font(.headline)
+                .font(.title)
+                .fontWeight(.bold)
                 .padding(.top)
             
             TextField("Enter your name", text: $tempName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
-                .padding(.bottom, 150)
+                .padding(.bottom, 12)
             
             Button(action: {
                 if !tempName.isEmpty {
@@ -37,12 +38,11 @@ struct NameView: View {
                 }
             }) {
                 Text("Continue")
-                    .padding()
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.blue, lineWidth: 2)
-                    )
+                    .foregroundStyle(.white)
             }
+            .padding()
+            .background(.green)
+            .cornerRadius(8)
             .disabled(tempName.isEmpty)
         }
         .onAppear {

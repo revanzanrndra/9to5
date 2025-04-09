@@ -133,7 +133,7 @@ struct MapView: View {
                 BottomSheetView(nameDestination: $nameDestination,
                                 isNavigationActive: $isNavigationActive,
                                 travelEstimates: $travelEstimates)
-                .background(Color.white)
+                .background(Color("SheetColor"))
                 .transition(.move(edge: .bottom)) // This is the magic ✨
                 .animation(.easeInOut, value: showBottomSheet)
             }

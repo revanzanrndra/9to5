@@ -10,7 +10,7 @@ import SwiftUI
 struct MainPageView: View {
     @State private var currentTime = Date()
     @State private var isBellPressed = true
-    @State private var alreadyParked: Bool = false
+    @AppStorage("alreadyParked") private var alreadyParked: Bool = false
     @AppStorage("savedName") private var textField: String = ""
     @StateObject private var notifManager = NotificationsManager()
     @AppStorage("notifNavigationTarget") var notifNavigationTarget: String?
@@ -25,6 +25,16 @@ struct MainPageView: View {
         return formatter
     }()
     
+    func getTotalMinutes() -> Int {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: currentTime)
+        let minute = calendar.component(.minute, from: currentTime)
+        
+        let totalMinutes = (hour * 60) + minute
+        
+        return totalMinutes
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -35,14 +45,23 @@ struct MainPageView: View {
                 Button("Test Notification") {
                     notifManager.testNotification()
                 }
-                Text(timeFormatter.string(from: currentTime))
-                    .font(.system(size: 60, weight: .medium, design: .monospaced))
-                    .padding()
-                    .onReceive(timer) { _ in
+                
+                VStack {
+                    if getTotalMinutes() < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
+                        NormalClock()
+                    } else if getTotalMinutes() < 540 { // 08:00 - 08:59 (540 minutes = 9 hours)
+                        PrePeakClock()
+                    } else if getTotalMinutes() < 1080 { // 09:00 - 17:59 (1080 minutes = 18 hours)
+                        PeakTimeClock()
+                    } else if getTotalMinutes() <= 1439 { // 18:00 - 23:59 (1439 minutes = 23:59)
+                        NormalClock()
+                    }
+                }
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
                         currentTime = Date()
                     }
-                    .overlay(RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.black, lineWidth: 1))
+                }
                 
                 DescriptionView(alreadyParked: $alreadyParked)
                     .padding(.top, 30)
@@ -70,15 +89,6 @@ struct MainPageView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Hi, \(textField)")
                         .fontWeight(.bold)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        isBellPressed.toggle()
-                    }) {
-                        Image(systemName: isBellPressed ? "bell.circle.fill" : "bell.slash.circle.fill")
-                            .font(.system(size: 30))
-                            .foregroundColor(isBellPressed ? .green : .gray)
-                    }
                 }
             }
             .padding(.vertical)

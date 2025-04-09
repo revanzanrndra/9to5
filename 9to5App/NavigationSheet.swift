@@ -121,8 +121,7 @@ struct BottomSheetView: View {
             
         }
         .padding()
-//        .background(.thinMaterial)
-        .cornerRadius(16)
+        .background(.thinMaterial)
     }
 
 }
