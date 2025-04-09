@@ -19,7 +19,7 @@ struct NotifContent {
     static let peakHour = NotifStructure(
         title: "Peak Time Alert - GOP 9",
         body: "Full Parking Expected During Peak Hours 09.00 AM - 18.00 PM. Plan Ahead to Avoid Delays, Thank You!",
-        hour: 3,
-        minute: 7
+        hour: 8,
+        minute: 30
     )
 }

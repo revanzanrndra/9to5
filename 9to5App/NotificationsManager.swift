@@ -59,7 +59,7 @@ class NotificationsManager: ObservableObject {
         content.sound = .default
         content.categoryIdentifier = "PARKING_REMINDER_CATEGORY"
 
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
@@ -75,13 +75,13 @@ class NotificationsManager: ObservableObject {
         let alreadyParkAction = UNNotificationAction(
             identifier: "ALREADY_PARK_ACTION",
             title: "Already Park",
-            options: [.foreground] // membuka aplikasi
+            options: [.destructive] // membuka aplikasi
         )
 
         let navigationAction = UNNotificationAction(
             identifier: "NAVIGATE_TO_GOP5_ACTION",
             title: "Navigation to GOP5",
-            options: [.foreground] // juga membuka aplikasi
+            options: [.foreground] // membuka aplikasi
         )
 
         let category = UNNotificationCategory(
@@ -94,4 +94,31 @@ class NotificationsManager: ObservableObject {
         UNUserNotificationCenter.current().setNotificationCategories([category])
     }
 
+}
+
+class NotificationsDelegate: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+    // Tampilkan notif saat app aktif
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        completionHandler([.badge, .banner, .sound])
+    }
+
+    // Action buttonß
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        switch response.actionIdentifier {
+        case "ALREADY_PARK_ACTION":
+            print( "User tapped: Already Parked")
+            UserDefaults.standard.set(true , forKey: "notifAlreadyParked")
+        case "NAVIGATE_TO_GOP5_ACTION":
+            print("User tapped: Navigation to GOP5")
+            UserDefaults.standard.set("navigateToGOP5", forKey: "notifNavigationTarget")
+        default:
+            break
+        }
+        completionHandler()
+    }
 }

@@ -10,9 +10,12 @@ import SwiftUI
 struct MainPageView: View {
     @State private var currentTime = Date()
     @State private var isBellPressed = true
+    
+    @StateObject private var notifManager = NotificationsManager()
+    @StateObject var notifDelegate = NotificationsDelegate()
+    
     @AppStorage("alreadyParked") private var alreadyParked: Bool = false
     @AppStorage("savedName") private var textField: String = ""
-    @StateObject private var notifManager = NotificationsManager()
     @AppStorage("notifNavigationTarget") var notifNavigationTarget: String?
     
     // Timer
@@ -45,9 +48,9 @@ struct MainPageView: View {
                     .onReceive(timer) { _ in
                         currentTime = Date()
                     }
-                //                Button("Test Notification") {
-                //                    notifManager.testNotification()
-                //                }
+                                Button("Test Notification") {
+                                    notifManager.testNotification()
+                                }
                 
                 VStack {
                     if getTotalMinutes(from: currentTime) < 480 { // 00:00 - 07:59 (480 minutes = 8 hours)
@@ -106,6 +109,7 @@ struct MainPageView: View {
                     print("Izin notifikasi ditolak.")
                 }
             }
+            UNUserNotificationCenter.current().delegate = notifDelegate
         }
     }
 }
