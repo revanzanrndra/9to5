@@ -96,8 +96,17 @@ struct MainPageView: View {
             .padding(.top)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("Hi, \(textField)")
-                        .fontWeight(.bold)
+                    HStack {
+                        Text("Hi, \(textField)")
+                            .fontWeight(.bold)
+                            .font(.system(size: 22))
+                        
+                        NavigationLink(destination: NameView(textField: $textField)) {
+                            Image(systemName: "pencil.line")
+                                .font(.system(size: 22))
+                                .foregroundStyle(.black)
+                        }
+                    }
                 }
             }
             .padding(.vertical)
